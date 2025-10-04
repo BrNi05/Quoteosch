@@ -28,7 +28,7 @@ export class QuoteController {
       'Retrieve a random quote. Optionally, filter by a specific lecturer using a query parameter.',
   })
   @Get()
-  async findRandom(@Query() query: FindQuoteDto): Promise<string> {
+  async findRandom(@Query() query: FindQuoteDto): Promise<QuoteResponse> {
     return this.quoteService.findRandom(query.lecturer);
   }
 

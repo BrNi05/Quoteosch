@@ -21,28 +21,29 @@ export class QuoteService {
     private readonly lecturerRepo: Repository<Lecturer>
   ) {}
 
-  // GET /quote?lecturer=kovacsj
-  async findRandom(lecturerShortName?: string): Promise<string> {
-    const where = lecturerShortName ? { lecturer: { shortName: lecturerShortName } } : {};
-
+  // GET /quote?lecturer=shortName
+  async findRandom(lecturerShortName?: string): Promise<QuoteResponse> {
     const count = await this.quoteRepo.count();
     if (count === 0) throw new InternalServerErrorException('Failed to retrieve a random quote');
 
-    const quotes = await this.quoteRepo.find({
-      where,
-      select: ['content'],
-      relations: ['lecturer'],
-    });
+    const query = this.quoteRepo
+      .createQueryBuilder('quote')
+      .leftJoinAndSelect('quote.lecturer', 'lecturer')
+      .select(['quote.id', 'quote.content', 'quote.lastModifiedAt', 'lecturer.shortName']);
 
-    if (quotes.length === 0) {
-      throw new BadRequestException('No quotes found for the specified lecturer');
+    if (lecturerShortName) {
+      query.where('lecturer.shortName = :shortName', { shortName: lecturerShortName });
     }
 
-    const random = Math.floor(Math.random() * quotes.length);
-    return quotes[random].content;
+    query.orderBy('RANDOM()').take(1);
+
+    const randomQuote = await query.getOne();
+    if (!randomQuote) throw new BadRequestException('No quotes found for the specified lecturer');
+
+    return Serializer.response(randomQuote);
   }
 
-  // GET /quote/verbose?lecturer=kovacsj
+  // GET /quote/verbose?lecturer=shortName
   async findAll(lecturerShortname?: string): Promise<QuoteResponse[]> {
     const where: FindOptionsWhere<Quote> = lecturerShortname
       ? { lecturer: { shortName: lecturerShortname } }

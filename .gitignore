@@ -1,24 +1,49 @@
-# Nestjs specific
-/dist
-/node_modules
-/build
-/tmp
+# Compiled output
+dist
+node_modules
+
+# Jest
+coverage
+
+# TS cache
+**/tsconfig.tsbuildinfo
+**/tsconfig.build.tsbuildinfo
+
+# ESLint cache
+.eslintcache
 
 # Logs
 logs
 *.log
 npm-debug.log*
-pnpm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
+
+# OS
+.DS_Store
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
 # dotenv environment variable files
 .env
-.env.development
-.env.test
-.env.production
 
 # temp directory
 .temp
 .tmp
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Database
+*.db
+*.sqlite
+migrations/*

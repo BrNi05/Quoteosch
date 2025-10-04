@@ -26,7 +26,7 @@ Explore all lecturers: [here](https://quoteosch.sigsegv.hu/lecturer).
 
 ## How to create your own instance
 
-- Clone the repo: `https://github.com/BrNi05/Quoteosch.git`.
+- Clone the repo: `git clone https://github.com/BrNi05/Quoteosch.git`.
 - Install dependencies: `npm install`.
 - Generate the initial database migration: `npm run db:generate`.
 - Run the migration: `npm run db:init`.

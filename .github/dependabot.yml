@@ -1,0 +1,58 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "DEPS UPDATE: "
+    groups:
+      "NestJS":
+        patterns:
+          - "@nestjs/**"
+          - "nestjs/**"
+          - "class-transformer"
+          - "class-validator"
+          - "reflect-metadata"
+          - "rxjs"
+          - "hpp"
+          - "helmet"
+          - "swagger-ui-express"
+          - "jest"
+      "Database":
+        patterns:
+          - "typeorm"
+          - "sqlite3"
+      "Linting and Formatting":
+        patterns:
+          - "eslint/**"
+          - "@eslint/**"
+          - "eslint"
+          - "eslint-config-prettier"
+          - "eslint-plugin-prettier"
+          - "prettier"
+          - "typescript-eslint"
+      "Types":
+        patterns:
+          - "@types/**"
+      "TypeScript":
+        patterns:
+          - "source-map-support"
+      "General":
+        patterns:
+          - "globals"
+      "Dev Tools":
+        patterns:
+          - "husky"
+          - "ts-jest"
+          - "ts-loader"
+          - "ts-node"
+          - "tsconfig-paths"
+          - "typescript"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "ACTIONS UPDATE: "

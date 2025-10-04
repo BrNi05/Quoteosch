@@ -16,6 +16,7 @@ updates:
           - "reflect-metadata"
           - "rxjs"
           - "hpp"
+          - "joi"
           - "helmet"
           - "swagger-ui-express"
           - "jest"

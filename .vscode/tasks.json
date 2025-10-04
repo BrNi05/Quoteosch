@@ -1,0 +1,75 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build",
+      "type": "npm",
+      "script": "build",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Start Prod",
+      "type": "npm",
+      "script": "start:prod",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Start Dev",
+      "type": "npm",
+      "script": "start:dev",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "DB: generate migration",
+      "type": "npm",
+      "script": "db:generate",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "DB: run migration",
+      "type": "npm",
+      "script": "db:init",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Lint",
+      "type": "npm",
+      "script": "lint",
+      "group": "test",
+      "problemMatcher": ["$eslint-stylish"]
+    },
+    {
+      "label": "Format",
+      "type": "npm",
+      "script": "format",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run tests",
+      "type": "npm",
+      "script": "test",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run test coverage scan",
+      "type": "npm",
+      "script": "test:cov",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Unsafe",
+      "type": "npm",
+      "script": "unsafe",
+      "group": "none",
+      "problemMatcher": []
+    }
+  ]
+}

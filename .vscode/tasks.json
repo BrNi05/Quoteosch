@@ -37,6 +37,41 @@
       "problemMatcher": []
     },
     {
+      "label": "Docker: Build",
+      "type": "npm",
+      "script": "docker:build",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker: Init",
+      "type": "npm",
+      "script": "docker:init",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker: Up",
+      "type": "npm",
+      "script": "docker:up",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker: Down",
+      "type": "npm",
+      "script": "docker:down",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker: Prune",
+      "type": "npm",
+      "script": "docker:prune",
+      "group": "none",
+      "problemMatcher": []
+    },
+    {
       "label": "Lint",
       "type": "npm",
       "script": "lint",

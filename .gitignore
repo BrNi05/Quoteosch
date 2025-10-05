@@ -46,4 +46,3 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 # Database
 *.db
 *.sqlite
-migrations/*

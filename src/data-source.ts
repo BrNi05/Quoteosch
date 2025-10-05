@@ -6,9 +6,9 @@ import { ContributeLecturer } from './lecturer/entity/contribute-lecturer.entity
 
 export const AppDataSource = new DataSource({
   type: 'sqlite',
-  database: 'data.db',
+  database: './database/data.db',
   entities: [Quote, ContributeQuote, Lecturer, ContributeLecturer],
-  migrations: ['src/migrations/*.ts'],
+  migrations: ['dist/migrations/*.js'],
   synchronize: false,
   logging: false,
 });

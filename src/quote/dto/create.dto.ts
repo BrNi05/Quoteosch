@@ -4,6 +4,7 @@ import { IsString, IsNotEmpty } from 'class-validator';
 export class CreateQuoteDto {
   @ApiPropertyOptional({
     description: 'The quote to be added/updated.',
+    example: 'I think, therefore I am.',
     type: String,
   })
   @IsString()
@@ -12,6 +13,7 @@ export class CreateQuoteDto {
 
   @ApiPropertyOptional({
     description: 'The shortened, unique name of the lecturer who said the quote/updated.',
+    example: 'ppeti',
     type: String,
   })
   @IsString()

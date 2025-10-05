@@ -6,6 +6,7 @@ import { Logger } from '@nestjs/common';
 
 // API Docs
 import { setupSwagger } from './utils/swagger';
+import { join } from 'path';
 
 // Security
 import helmet from 'helmet';
@@ -64,6 +65,9 @@ async function bootstrap() {
       transform: true,
     })
   );
+
+  // Server static assets (for swagger-ui customizations)
+  app.useStaticAssets(join(__dirname, '..', 'public'));
 
   // Generate API docs
   setupSwagger(app);

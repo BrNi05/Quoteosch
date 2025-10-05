@@ -6,8 +6,6 @@ export function setupSwagger(app: INestApplication<unknown>): OpenAPIObject {
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Quoteosch API')
     .setDescription('An API to spread the eternal wisdom of BME lecturers.')
-    .setContact('Barni', 'https://github.com/BrNi05', 'szocsbarnabas8@gmail.com')
-    .setTermsOfService('https://github.com/BrNi05/Quoteosch/blob/main/README.md#terms-of-use')
     .addBearerAuth(
       {
         type: 'http',
@@ -40,6 +38,8 @@ export function setupSwagger(app: INestApplication<unknown>): OpenAPIObject {
       deepLinking: true,
     },
     customSiteTitle: 'Quoteosch API Docs',
+    customCssUrl: 'swagger-custom.css',
+    customJs: ['swagger-custom.js'],
   });
 
   return swaggerFactory;

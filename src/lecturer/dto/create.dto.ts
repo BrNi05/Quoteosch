@@ -4,6 +4,7 @@ import { IsString, IsNotEmpty } from 'class-validator';
 export class CreateLecturerDto {
   @ApiPropertyOptional({
     description: 'The full name of the lecturer to be added/updated.',
+    example: 'Példa Péter',
     type: String,
   })
   @IsString()
@@ -12,6 +13,7 @@ export class CreateLecturerDto {
 
   @ApiPropertyOptional({
     description: 'The shortened, unique name of the lecturer to be added/updated.',
+    example: 'ppeti',
     type: String,
   })
   @IsString()

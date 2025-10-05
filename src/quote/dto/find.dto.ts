@@ -5,7 +5,7 @@ export class FindQuoteDto {
   @ApiPropertyOptional({
     description: 'Optional filter to get quotes from a specific lecturer.',
     type: String,
-    example: 'shortName',
+    example: 'ppeti',
   })
   @IsOptional()
   @IsString()

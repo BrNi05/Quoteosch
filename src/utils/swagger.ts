@@ -5,7 +5,9 @@ import type { OpenAPIObject } from '@nestjs/swagger';
 export function setupSwagger(app: INestApplication<unknown>): OpenAPIObject {
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Quoteosch API')
-    .setDescription('Quoteosch API Docs')
+    .setDescription('An API to spread the eternal wisdom of BME lecturers.')
+    .setContact('Barni', 'https://github.com/BrNi05', 'szocsbarnabas8@gmail.com')
+    .setTermsOfService('https://github.com/BrNi05/Quoteosch/blob/main/README.md#terms-of-use')
     .addBearerAuth(
       {
         type: 'http',
@@ -20,7 +22,7 @@ export function setupSwagger(app: INestApplication<unknown>): OpenAPIObject {
     operationIdFactory: (_controllerKey: string, methodKey: string) => methodKey,
   });
 
-  // Every POST, PUT and DELETE endpoint requires authentication
+  // Every POST, PUT and DELETE endpoint require authentication
   for (const [_pathKey, path] of Object.entries(swaggerFactory.paths)) {
     for (const [method, methodDoc] of Object.entries(path)) {
       if (!['POST', 'PUT', 'DELETE'].includes(method.toUpperCase())) continue;
@@ -37,6 +39,7 @@ export function setupSwagger(app: INestApplication<unknown>): OpenAPIObject {
       showRequestDuration: true,
       deepLinking: true,
     },
+    customSiteTitle: 'Quoteosch API Docs',
   });
 
   return swaggerFactory;

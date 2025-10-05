@@ -8,7 +8,7 @@ Explore the API documentation [here](https://quoteosch.sigsegv.hu/).
 
 To fetch a random quote: `https://quoteosch.sigsegv.hu/quote`.
 
-To fetch a random quote from a specific lecturer: `https://quoteosch.sigsegv.hu/quote?lecturer=nickname`.
+To fetch a random quote from a specific lecturer: `https://quoteosch.sigsegv.hu/quote?lecturer=ppeti`.
 
 ## Terms of Use
 
@@ -23,7 +23,8 @@ Use the dedicated endpoints to suggest a:
 - [new lecturer](https://quoteosch.sigsegv.hu/#/ContributeLecturer/suggest)
 - [new quote](https://quoteosch.sigsegv.hu/#/ContributeQuote/suggest)
 
-Use `Postman` or `curl` to do so.
+> [!TIP]
+> You can use `Postman` or `curl` for this, or simply try it directly in Swagger using the `Try it out` feature.
 
 > [!IMPORTANT]
 > Quotes can only be suggested for lecturers who are already accepted and present in the database.
@@ -47,11 +48,14 @@ For testing / development:
 
 For production:
 
-- Copy `docker-compose.yaml` to a desired location.
+- Copy [`docker-compose.yaml`](https://github.com/BrNi05/Quoteosch/blob/main/release/docker-compose.yaml) to a desired location.
 - Create your `.env`.
 - For the very first time: `docker compose run --rm quoteosch-api-init`.
 - Then start the API normally: `docker compose up -d quoteosch-api`.
 - The `release` folder contains a script to auto-start the container on boot.
+
+> [!TIP]
+> If any changes are made to the database schema, you’ll need to start the migration container again using: `docker compose run --rm quoteosch-api-init`.
 
 ## Tech Stack
 
@@ -61,3 +65,7 @@ For production:
 - Swagger (OpenAPI)
 - Docker
 - Cloudflare Tunnel
+
+## Disclaimer
+
+Quoteosch API initially was a joke, but it evolved into a sophisticated project. It's meant for fun and not to offend anyone.

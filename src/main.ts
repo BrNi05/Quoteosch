@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import type { NestExpressApplication } from '@nestjs/platform-express';
+import type { Request, Response, NextFunction } from 'express';
 import { Logger } from '@nestjs/common';
 
 // API Docs
@@ -21,7 +22,7 @@ async function bootstrap() {
     logger.error(error?.message);
   });
 
-  // Protection agains DoS attacks (via resource exhaustion)
+  // Protection against DoS attacks (via resource exhaustion)
   app.use(json({ limit: '1kb' }));
   app.use(urlencoded({ extended: true, limit: '1kb' }));
 
@@ -42,6 +43,14 @@ async function bootstrap() {
       noSniff: true,
     })
   );
+
+  // Disable caching
+  app.use((_req: Request, res: Response, next: NextFunction) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    next();
+  });
 
   // Trust proxy (last one)
   // Mostly redundant with Cloudflare Tunnels

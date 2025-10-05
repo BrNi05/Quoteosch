@@ -44,6 +44,7 @@ async function bootstrap() {
   );
 
   // Trust proxy (last one)
+  // Mostly redundant with Cloudflare Tunnels
   app.set('trust proxy', 1);
 
   // Global validation pipe

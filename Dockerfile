@@ -26,4 +26,7 @@ RUN npm ci --omit=dev --omit=optional --silent
 
 COPY --from=build /quoteosch/dist ./dist
 
+# Copy static assets (Swagger UI customization)
+COPY public ./public
+
 CMD ["node", "dist/main.js"]

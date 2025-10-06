@@ -27,6 +27,7 @@ export class QuoteController {
     summary:
       'Retrieve a random quote. Optionally, filter by a specific lecturer using a query parameter.',
   })
+  @Throttle({ default: { limit: 100, ttl: 6000 } })
   @Get()
   async findRandom(@Query() query: FindQuoteDto): Promise<QuoteResponse> {
     return this.quoteService.findRandom(query.lecturer);
@@ -37,7 +38,7 @@ export class QuoteController {
     summary:
       'Retrieve a verbose list of all quotes. Optionally, filter by a specific lecturer using a query parameter.',
   })
-  @Throttle({ default: { limit: 5, ttl: 60000 } })
+  @Throttle({ default: { limit: 50, ttl: 6000 } })
   @Get('verbose')
   async findVerbose(@Query() query: FindQuoteDto): Promise<QuoteResponse[]> {
     return this.quoteService.findAll(query.lecturer);

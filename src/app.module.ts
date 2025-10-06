@@ -28,7 +28,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
         abortEarly: true,
       },
     }),
-    ThrottlerModule.forRoot({ throttlers: [{ ttl: 60000, limit: 10 }] }),
+    ThrottlerModule.forRoot({ throttlers: [{ limit: 1000, ttl: 60000 }] }),
   ],
   providers: [
     {

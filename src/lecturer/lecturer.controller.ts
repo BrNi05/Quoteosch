@@ -22,6 +22,7 @@ export class LecturerController {
 
   // GET /lecturer
   @ApiOperation({ summary: 'Returns a verbose list of all lecturers.' })
+  @Throttle({ default: { limit: 50, ttl: 6000 } })
   @Get()
   async findAll(): Promise<LecturerResponse[]> {
     return this.lecturerService.findAll();

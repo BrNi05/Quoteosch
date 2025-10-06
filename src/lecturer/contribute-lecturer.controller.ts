@@ -21,6 +21,7 @@ export class ContributeLecturerController {
 
   // GET /lecturer/contribute
   @ApiOperation({ summary: 'Retrieve a verbose list of all (pending) suggested lecturers.' })
+  @Throttle({ default: { limit: 100, ttl: 6000 } })
   @Get()
   async findAll(): Promise<LecturerResponse[]> {
     return this.contributeService.findAll();
@@ -30,7 +31,7 @@ export class ContributeLecturerController {
   @ApiOperation({
     summary: 'CONTRIBUTION ENDPOINT - Suggest a lecturer to be added to the database.',
   })
-  @Throttle({ default: { limit: 2, ttl: 60000 } })
+  @Throttle({ default: { limit: 50, ttl: 60000 } })
   @Patch()
   async suggest(@Body() createDto: CreateLecturerDto): Promise<LecturerResponse> {
     return this.contributeService.suggest(createDto);

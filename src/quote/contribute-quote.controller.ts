@@ -21,7 +21,7 @@ export class ContributeQuoteController {
 
   // GET /quote/contribute
   @ApiOperation({ summary: 'Retrieve a verbose list of all (pending) suggested quotes.' })
-  @Throttle({ default: { limit: 5, ttl: 60000 } })
+  @Throttle({ default: { limit: 100, ttl: 6000 } })
   @Get()
   async findAll(): Promise<QuoteResponse[]> {
     return this.contributeService.findAll();
@@ -32,7 +32,7 @@ export class ContributeQuoteController {
     summary:
       'CONTRIBUTION ENDPOINT - Suggest a quote to be added to the database. Only already acceopted lecturers can have quotes suggested.',
   })
-  @Throttle({ default: { limit: 2, ttl: 60000 } })
+  @Throttle({ default: { limit: 50, ttl: 60000 } })
   @Patch()
   async suggest(@Body() createQuoteDto: CreateQuoteDto): Promise<QuoteResponse> {
     const { quote, lecturerShortName } = createQuoteDto;

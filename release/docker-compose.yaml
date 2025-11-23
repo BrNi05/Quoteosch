@@ -8,6 +8,8 @@ services:
     volumes:
       - quote_data:/quoteosch/database
     restart: "no"
+    networks:
+      - quoteosch-network
 
   quoteosch-api:
     container_name: quoteosch-api
@@ -26,6 +28,15 @@ services:
       options:
         max-size: "50m"
         max-file: "5"
+    networks:
+      - quoteosch-network
 
 volumes:
   quote_data:
+
+networks:
+  quoteosch-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.100.0.0/24

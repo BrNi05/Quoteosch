@@ -1,11 +1,9 @@
 #!/bin/bash
 
-
 # Error mgmt
 set -e
 on_error() { echo "Script failed. Error on line: $1. Terminating..."; }
 trap 'on_error $LINENO' ERR
-
 
 # Privilige check
 if [[ "$EUID" -ne 0 ]]; then
@@ -14,46 +12,91 @@ if [[ "$EUID" -ne 0 ]]; then
 fi
 
 # Install Cloudflare
-mkdir -p --mode=0755 /usr/share/keyrings
-curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg | tee /usr/share/keyrings/cloudflare-main.gpg >/dev/null
-echo 'deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared bookworm main' | tee /etc/apt/sources.list.d/cloudflared.list
-apt-get update && apt-get install -y cloudflared
+echo "Checking for existing Cloudflare installation..."
+if ! command -v cloudflared >/dev/null 2>&1; then   
+    mkdir -p --mode=0755 /usr/share/keyrings
+    curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg | tee /usr/share/keyrings/cloudflare-main.gpg >/dev/null
+    echo 'deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared bookworm main' | tee /etc/apt/sources.list.d/cloudflared.list
+    apt-get update && apt-get install -y cloudflared
 
-echo "Cloudflare installation complete."
+    echo -e "Cloudflare installation complete.\n"
+else
+    echo -e "Cloudflare is already installed.\n"
+fi
 
 # Authenticate
-read -p "Press any key to continue with authentication..."
-cloudflared tunnel login
-echo "Cloudflare authentication complete."
+CERT="/root/.cloudflared/cert.pem"
+
+read -rp "Checking if login is neccessary. Press any key to continue..."
+if [[ -f "$CERT" ]]; then
+    echo -e "\nCloudflare is already authenticated.\n"
+else
+    cloudflared tunnel login
+    echo -e "\nCloudflare authentication complete.\n"
+fi
+
+# Base Cloudflared directory
+CF_DIR="/root/.cloudflared"
+mkdir -p "$CF_DIR"
 
 # Create a tunnel
-read -p "Press any key to continue with tunnel creation..."
-cloudflared tunnel create quoteosch-api
+read -rp "Press any key to continue with tunnel creation..."
 
-read -p "Now copy your Tunnel ID and edit the config file. Press any key to continue..."
+read -rp "Enter the subdomain for this tunnel: " SUBDOMAIN
+read -rp "Enter the port your API is running on (eg. 3000): " API_PORT
+read -rp "Enter your domain name (eg. example.com): " DOMAIN
 
-cat <<EOF > /root/.cloudflared/config.yml
-tunnel: <TUNNEL_ID>
-credentials-file: /root/.cloudflared/<TUNNEL_ID>.json
+TUNNEL_NAME=$SUBDOMAIN
+
+echo ""
+cloudflared tunnel create "$TUNNEL_NAME"
+echo -e "\nTunnel $TUNNEL_NAME created successfully.\n"
+
+# Create config file
+TUNNEL_ID=$(cloudflared tunnel list --output json | jq -r ".[] | select(.name==\"$TUNNEL_NAME\") | .id")
+CONFIG_FILE="$CF_DIR/config-$TUNNEL_NAME.yml"
+
+cat <<EOF > "$CONFIG_FILE"
+tunnel: $TUNNEL_ID
+credentials-file: $CF_DIR/$TUNNEL_ID.json
 
 ingress:
-    - hostname: subdomain.yourdomain.com
-      service: http://localhost:3000
-    - service: http_status:404
+  - hostname: $SUBDOMAIN.$DOMAIN
+    service: http://localhost:$API_PORT
+  - service: http_status:404
 EOF
 
-nano /root/.cloudflared/config.yml
+read -rp "Press any key to create a DNS record for $SUBDOMAIN.$DOMAIN..."
+cloudflared tunnel route dns "$TUNNEL_NAME" "$SUBDOMAIN.$DOMAIN"
+echo -e "CNAME record created for $SUBDOMAIN.$DOMAIN pointing to tunnel: $TUNNEL_NAME.\n"
 
-read -p "What should be the subdomain for the API?: " SUBDOMAIN
-read -p "What is your domain name (e.g., example.com)?: " DOMAIN
-read -p "Press any key to create a DNS record for $SUBDOMAIN.$DOMAIN..."
+# Systemd service for this tunnel
+cat <<EOF > /etc/systemd/system/cftunnel-"$TUNNEL_NAME".service
+[Unit]
+Description=Cloudflare Tunnel for Quoteosch API
+Wants=network-online.target
+After=network-online.target
 
-cloudflared tunnel route dns quoteosch-api $SUBDOMAIN.$DOMAIN
+[Service]
+ExecStart=/usr/bin/cloudflared --config $CONFIG_FILE tunnel run $TUNNEL_NAME
+Restart=always
+RestartSec=5s
+User=root
 
-# Create a systemd service
-cloudflared service install
-systemctl enable cloudflared
-systemctl start cloudflared
+# IO and CPU
+Nice=-5
+IOSchedulingClass=best-effort
+IOSchedulingPriority=1
 
-echo "Cloudflare tunnel setup complete."
-echo "Your API should now be accessible via https://$SUBDOMAIN.$DOMAIN"
+# Security
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable --now cftunnel-"$TUNNEL_NAME".service
+
+echo -e "\nCloudflare tunnel setup complete. Your API should now be accessible via https://$SUBDOMAIN.$DOMAIN"
+echo "You may need to reboot for changes to take effect."

@@ -33,11 +33,11 @@
     "release:docker": "npm run build && node scripts/release-docker.js"
   },
   "dependencies": {
-    "@nestjs/common": "^11.1.11",
+    "@nestjs/common": "^11.1.12",
     "@nestjs/config": "^4.0.2",
-    "@nestjs/core": "^11.1.11",
-    "@nestjs/platform-express": "^11.1.11",
-    "@nestjs/swagger": "^11.2.4",
+    "@nestjs/core": "^11.1.12",
+    "@nestjs/platform-express": "^11.1.12",
+    "@nestjs/swagger": "^11.2.5",
     "@nestjs/throttler": "^6.5.0",
     "@nestjs/typeorm": "^11.0.0",
     "class-transformer": "^0.5.1",
@@ -54,9 +54,9 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.3",
     "@eslint/js": "^9.39.2",
-    "@nestjs/cli": "^11.0.14",
+    "@nestjs/cli": "^11.0.16",
     "@nestjs/schematics": "^11.0.9",
-    "@nestjs/testing": "^11.1.11",
+    "@nestjs/testing": "^11.1.12",
     "@types/express": "^5.0.6",
     "@types/hpp": "^0.2.7",
     "@types/jest": "^30.0.0",
